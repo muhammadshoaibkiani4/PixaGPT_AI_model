@@ -1,0 +1,123 @@
+/* === PIXA GPT LAYOUT === */
+body {
+  margin: 0;
+  padding: 0;
+  background: url("assets/pixa_gpt_website_bg.png") no-repeat center center/cover;
+  font-family: 'Press Start 2P', cursive;
+  color: white;
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* Left side – AI face and bulb */
+#leftPanel {
+  width: 40%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  position: relative;
+}
+
+/* Face frame */
+#faceFrame {
+  background: url("assets/pixa_gpt_pixel_face_interface_frame.png") no-repeat center/contain;
+  width: 300px;
+  height: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Face itself (changes via JS) */
+#faceImage {
+  width: 180px;
+  height: 180px;
+  image-rendering: pixelated;
+}
+
+/* Bulb indicator */
+#statusBulb {
+  width: 64px;
+  height: 64px;
+  image-rendering: pixelated;
+}
+
+/* Power buttons */
+#powerButtons {
+  display: flex;
+  gap: 10px;
+}
+.power-btn {
+  width: 64px;
+  height: 64px;
+  image-rendering: pixelated;
+  cursor: pointer;
+}
+
+/* Right side – Chat area */
+#rightPanel {
+  width: 60%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 20px;
+}
+
+/* Chat box */
+#chatBox {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Message styling */
+.userMsg {
+  align-self: flex-end;
+  background: #444;
+  padding: 8px;
+  border-radius: 8px;
+  max-width: 80%;
+}
+
+.aiMsg {
+  align-self: flex-start;
+  background: #222;
+  padding: 8px;
+  border-radius: 8px;
+  max-width: 80%;
+}
+
+/* Input bar */
+#inputSection {
+  display: flex;
+  align-items: center;
+  background: url("assets/pixa_gpt_chat_interface_frame.png") no-repeat center/contain;
+  background-size: 100% 100%;
+  padding: 10px;
+  gap: 10px;
+}
+
+/* Input text */
+#userInput {
+  flex: 1;
+  background: url("assets/pixa_gpt_chat_message_enter_bar.png") no-repeat center/cover;
+  border: none;
+  padding: 12px;
+  color: white;
+  outline: none;
+}
+
+/* Send button */
+#sendButton {
+  width: 64px;
+  height: 64px;
+  background: url("assets/pixa_gpt_chat_message_enter_button.png") no-repeat center/contain;
+  border: none;
+  cursor: pointer;
+}
