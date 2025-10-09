@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>PIXA GPT</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body style="background-image: url('assets/pixa_gpt_website_bg.png'); background-size: cover;">
+
+  <div id="container">
+    <!-- Left side (Pixel Face Section) -->
+    <div id="face-section">
+      <img id="faceFrame" src="assets/pixa_gpt_pixel_face_interface_frame.png" class="frame">
+      <img id="pixelFace" src="assets/pixa_gpt_pixel_face_neutral.png" alt="AI Face" class="face">
+      
+      <div id="indicators">
+        <img id="bulb" src="assets/pixa_gpt_activation_bulb_unactive.png" class="bulb">
+        <img id="powerBtn" src="assets/pixa_gpt_power_off_button.png" class="power">
+      </div>
+    </div>
+
+    <!-- Right side (Chat Section) -->
+    <div id="chat-section">
+      <img id="chatFrame" src="assets/pixa_gpt_chat_interface_frame.png" class="frame">
+      <div id="chatBox"></div>
+
+      <div id="input-area">
+        <img src="assets/pixa_gpt_chat_message_enter_bar.png" id="inputBar" class="bar">
+        <input id="messageInput" type="text" placeholder="Type your message...">
+        <img src="assets/pixa_gpt_chat_message_enter_button.png" id="sendBtn" class="send" onclick="sendMessage()">
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
