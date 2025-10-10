@@ -8,11 +8,8 @@
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 </head>
 <body>
-  <!-- LEFT: AI FACE -->
-  <div id="leftPanel">
-    <div id="faceFrame">
-      <img id="faceImage" src="assets/pixa_gpt_pixel_face_neutral.png" alt="AI Face">
-    </div>
+  <!-- TOP BAR (bulb + power buttons) -->
+  <div id="topBar">
     <img id="statusBulb" src="assets/pixa_gpt_activation_bulb_unactive.png" alt="Status Light">
     <div id="powerButtons">
       <img id="powerOn" class="power-btn" src="assets/pixa_gpt_power_on_button.png" alt="Power On">
@@ -20,10 +17,16 @@
     </div>
   </div>
 
+  <!-- LEFT: FACE -->
+  <div id="leftPanel">
+    <div id="faceFrame">
+      <img id="faceImage" src="assets/pixa_gpt_pixel_face_neutral.png" alt="AI Face">
+    </div>
+  </div>
+
   <!-- RIGHT: CHAT -->
   <div id="rightPanel">
     <div id="chatBox"></div>
-
     <div id="inputSection">
       <input type="text" id="userInput" placeholder="Type a message..." />
       <button id="sendButton"></button>
