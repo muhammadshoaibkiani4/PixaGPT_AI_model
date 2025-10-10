@@ -1,87 +1,80 @@
-// PIXA-GPT MAIN SCRIPT
-const faceImage = document.getElementById("faceImage");
-const bulb = document.getElementById("statusBulb");
 const powerOn = document.getElementById("powerOn");
 const powerOff = document.getElementById("powerOff");
+const bulb = document.getElementById("statusBulb");
+const face = document.getElementById("faceImage");
 const sendButton = document.getElementById("sendButton");
-const userInput = document.getElementById("userInput");
+const input = document.getElementById("userInput");
 const chatBox = document.getElementById("chatBox");
 
 let powered = false;
 
-// === POWER HANDLING ===
-powerOn.addEventListener("click", () => {
+// === POWER BUTTONS ===
+powerOn.onclick = () => {
   powered = true;
   bulb.src = "assets/pixa_gpt_activation_bulb_active.png";
-  faceImage.src = "assets/pixa_gpt_pixel_face_happy.png";
-});
+  face.src = "assets/pixa_gpt_pixel_face_neutral.png";
+  appendMessage("System activated.", "ai");
+};
 
-powerOff.addEventListener("click", () => {
+powerOff.onclick = () => {
   powered = false;
   bulb.src = "assets/pixa_gpt_activation_bulb_unactive.png";
-  faceImage.src = "assets/pixa_gpt_pixel_face_neutral.png";
-  chatBox.innerHTML += `<div class="aiMsg">(PIXA-GPT powered off)</div>`;
-});
+  face.src = "assets/pixa_gpt_pixel_face_neutral.png";
+  appendMessage("System shutting down...", "ai");
+};
 
-// === CHAT LOGIC ===
-sendButton.addEventListener("click", sendMessage);
-userInput.addEventListener("keydown", (e) => {
+// === SEND MESSAGE ===
+sendButton.onclick = sendMessage;
+input.addEventListener("keydown", (e) => {
   if (e.key === "Enter") sendMessage();
 });
 
-async function sendMessage() {
-  const text = userInput.value.trim();
+function sendMessage() {
+  const text = input.value.trim();
   if (!text) return;
   if (!powered) {
-    appendMessage("(Please power on PIXA-GPT first.)", "ai");
+    appendMessage("(Turn on PIXA-GPT first.)", "ai");
     return;
   }
 
   appendMessage(text, "user");
-  userInput.value = "";
+  input.value = "";
 
-  // Thinking phase
-  faceImage.src = "assets/pixa_gpt_pixel_face_thinking.png";
+  // Thinking face during "response"
+  face.src = "assets/pixa_gpt_pixel_face_thinking.png";
   bulb.src = "assets/pixa_gpt_activation_bulb_thinking.png";
 
-  try {
-    const res = await fetch("http://127.0.0.1:4891/v1/chat/completions", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        model: "Reasoner v1",
-        messages: [{ role: "user", content: text }],
-        max_tokens: 100,
-      }),
-    });
+  setTimeout(() => {
+    const reply = mockAI(text);
+    appendMessage(reply, "ai");
 
-    const data = await res.json();
-    const aiReply = data.choices?.[0]?.message?.content || "(No response)";
-    appendMessage(aiReply, "ai");
-
-    // Emotion logic
-    const lower = aiReply.toLowerCase();
-    if (lower.includes("sorry") || lower.includes("not")) {
-      faceImage.src = "assets/pixa_gpt_pixel_face_sad.png";
-    } else if (lower.includes("?")) {
-      faceImage.src = "assets/pixa_gpt_pixel_face_confused.png";
-    } else {
-      faceImage.src = "assets/pixa_gpt_pixel_face_happy.png";
-    }
+    // Happy face after reply
+    face.src = "assets/pixa_gpt_pixel_face_happy.png";
     bulb.src = "assets/pixa_gpt_activation_bulb_active.png";
-  } catch (err) {
-    console.error(err);
-    appendMessage("(Connection error — is GPT4All running?)", "ai");
-    faceImage.src = "assets/pixa_gpt_pixel_face_angry.png";
-    bulb.src = "assets/pixa_gpt_activation_bulb_unactive.png";
-  }
+
+    setTimeout(() => {
+      face.src = "assets/pixa_gpt_pixel_face_neutral.png";
+    }, 2000);
+  }, 1500);
 }
 
-// === MESSAGE DISPLAY ===
-function appendMessage(text, type) {
-  const msg = document.createElement("div");
-  msg.classList.add(type === "user" ? "userMsg" : "aiMsg");
-  msg.textContent = text;
-  chatBox.appendChild(msg);
+// === APPEND CHAT MESSAGE ===
+function appendMessage(msg, sender) {
+  const div = document.createElement("div");
+  div.classList.add(sender === "user" ? "userMsg" : "aiMsg");
+  div.textContent = msg;
+  chatBox.appendChild(div);
   chatBox.scrollTop = chatBox.scrollHeight;
+}
+
+// === MOCK AI ===
+function mockAI(input) {
+  const responses = [
+    "That's quite interesting!",
+    "Let me process that...",
+    "I think I understand.",
+    "Good question!",
+    "Hmm... fascinating."
+  ];
+  return responses[Math.floor(Math.random() * responses.length)];
 }
