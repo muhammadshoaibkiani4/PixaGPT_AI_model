@@ -1,4 +1,4 @@
-// PIXA-GPT LOGIC
+// PIXA-GPT MAIN SCRIPT
 const faceImage = document.getElementById("faceImage");
 const bulb = document.getElementById("statusBulb");
 const powerOn = document.getElementById("powerOn");
@@ -8,7 +8,6 @@ const userInput = document.getElementById("userInput");
 const chatBox = document.getElementById("chatBox");
 
 let powered = false;
-let thinking = false;
 
 // === POWER HANDLING ===
 powerOn.addEventListener("click", () => {
@@ -21,6 +20,7 @@ powerOff.addEventListener("click", () => {
   powered = false;
   bulb.src = "assets/pixa_gpt_activation_bulb_unactive.png";
   faceImage.src = "assets/pixa_gpt_pixel_face_neutral.png";
+  chatBox.innerHTML += `<div class="aiMsg">(PIXA-GPT powered off)</div>`;
 });
 
 // === CHAT LOGIC ===
@@ -31,7 +31,11 @@ userInput.addEventListener("keydown", (e) => {
 
 async function sendMessage() {
   const text = userInput.value.trim();
-  if (!text || !powered) return;
+  if (!text) return;
+  if (!powered) {
+    appendMessage("(Please power on PIXA-GPT first.)", "ai");
+    return;
+  }
 
   appendMessage(text, "user");
   userInput.value = "";
@@ -73,7 +77,7 @@ async function sendMessage() {
   }
 }
 
-// === HELPER: DISPLAY MESSAGE ===
+// === MESSAGE DISPLAY ===
 function appendMessage(text, type) {
   const msg = document.createElement("div");
   msg.classList.add(type === "user" ? "userMsg" : "aiMsg");
