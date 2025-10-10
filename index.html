@@ -1,36 +1,39 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>PIXA-GPT</title>
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="style.css">
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 </head>
 <body>
-  <!-- TOP BAR (bulb + power buttons) -->
-  <div id="topBar">
-    <img id="statusBulb" src="assets/pixa_gpt_activation_bulb_unactive.png" alt="Status Light">
-    <div id="powerButtons">
-      <img id="powerOn" class="power-btn" src="assets/pixa_gpt_power_on_button.png" alt="Power On">
-      <img id="powerOff" class="power-btn" src="assets/pixa_gpt_power_off_button.png" alt="Power Off">
-    </div>
-  </div>
+  <div class="container">
 
-  <!-- LEFT: FACE -->
-  <div id="leftPanel">
-    <div id="faceFrame">
-      <img id="faceImage" src="assets/pixa_gpt_pixel_face_neutral.png" alt="AI Face">
-    </div>
-  </div>
+    <!-- LEFT PANEL -->
+    <div class="left-panel">
+      <div class="top-bar">
+        <img id="statusBulb" src="assets/pixa_gpt_activation_bulb_unactive.png" alt="Bulb">
+        <div class="power-buttons">
+          <img id="powerOff" src="assets/pixa_gpt_power_off_button.png" alt="Power Off" class="power-btn">
+          <img id="powerOn" src="assets/pixa_gpt_power_on_button.png" alt="Power On" class="power-btn">
+        </div>
+      </div>
 
-  <!-- RIGHT: CHAT -->
-  <div id="rightPanel">
-    <div id="chatBox"></div>
-    <div id="inputSection">
-      <input type="text" id="userInput" placeholder="Type a message..." />
-      <button id="sendButton"></button>
+      <div class="face-frame">
+        <img id="faceImage" src="assets/pixa_gpt_pixel_face_neutral.png" alt="AI Face">
+      </div>
     </div>
+
+    <!-- RIGHT PANEL -->
+    <div class="right-panel">
+      <div id="chatBox"></div>
+      <div class="chat-bar">
+        <input type="text" id="userInput" placeholder="Type here...">
+        <button id="sendButton">ENTER</button>
+      </div>
+    </div>
+
   </div>
 
   <script src="script.js"></script>
