@@ -10,7 +10,7 @@ body {
   overflow: hidden;
 }
 
-/* Left side – AI face and bulb */
+/* LEFT: AI FACE */
 #leftPanel {
   width: 40%;
   display: flex;
@@ -21,7 +21,6 @@ body {
   position: relative;
 }
 
-/* Face frame */
 #faceFrame {
   background: url("assets/pixa_gpt_pixel_face_interface_frame.png") no-repeat center/contain;
   width: 300px;
@@ -31,33 +30,36 @@ body {
   justify-content: center;
 }
 
-/* Face itself (changes via JS) */
 #faceImage {
   width: 180px;
   height: 180px;
   image-rendering: pixelated;
 }
 
-/* Bulb indicator */
 #statusBulb {
   width: 64px;
   height: 64px;
   image-rendering: pixelated;
 }
 
-/* Power buttons */
 #powerButtons {
   display: flex;
   gap: 10px;
 }
+
 .power-btn {
   width: 64px;
   height: 64px;
   image-rendering: pixelated;
   cursor: pointer;
+  transition: transform 0.2s;
 }
 
-/* Right side – Chat area */
+.power-btn:hover {
+  transform: scale(1.1);
+}
+
+/* RIGHT: CHAT AREA */
 #rightPanel {
   width: 60%;
   background: rgba(0, 0, 0, 0.5);
@@ -67,7 +69,6 @@ body {
   padding: 20px;
 }
 
-/* Chat box */
 #chatBox {
   flex: 1;
   overflow-y: auto;
@@ -76,13 +77,13 @@ body {
   gap: 10px;
 }
 
-/* Message styling */
 .userMsg {
   align-self: flex-end;
   background: #444;
   padding: 8px;
   border-radius: 8px;
   max-width: 80%;
+  word-wrap: break-word;
 }
 
 .aiMsg {
@@ -91,9 +92,10 @@ body {
   padding: 8px;
   border-radius: 8px;
   max-width: 80%;
+  word-wrap: break-word;
 }
 
-/* Input bar */
+/* INPUT BAR */
 #inputSection {
   display: flex;
   align-items: center;
@@ -103,7 +105,6 @@ body {
   gap: 10px;
 }
 
-/* Input text */
 #userInput {
   flex: 1;
   background: url("assets/pixa_gpt_chat_message_enter_bar.png") no-repeat center/cover;
@@ -111,9 +112,9 @@ body {
   padding: 12px;
   color: white;
   outline: none;
+  font-family: inherit;
 }
 
-/* Send button */
 #sendButton {
   width: 64px;
   height: 64px;
