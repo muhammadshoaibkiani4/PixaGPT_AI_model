@@ -1,140 +1,163 @@
-const API_URL = "http://127.0.0.1:4891/v1/chat/completions";
-const MODEL = "deepseek-r1-distill-qwen-1.5b";
+// ======== PIXA GPT MAIN SCRIPT ========
 
+// --- DOM ELEMENTS ---
 const powerBtn = document.getElementById("power-btn");
-const statusLight = document.getElementById("status-light");
-const robotFace = document.getElementById("robot-face");
-const chatBox = document.getElementById("chat-box");
-const sendBtn = document.getElementById("send-btn");
-const messageInput = document.getElementById("message-input");
-const timeText = document.getElementById("time-text");
+const robotEmotion = document.getElementById("robot-emotion");
+const statusIcon = document.getElementById("status-icon");
 const timeIcon = document.getElementById("time-icon");
+const liveTime = document.getElementById("live-time");
+const chatBox = document.getElementById("chat-box");
+const userInput = document.getElementById("user-input");
+const sendBtn = document.getElementById("send-btn");
 const breakPopup = document.getElementById("break-popup");
-const breakBtn = document.getElementById("break-btn");
 const continueBtn = document.getElementById("continue-btn");
-const closePopupBtn = document.getElementById("close-popup-btn");
+const closeBreakBtn = document.getElementById("close-break-btn");
 
-let systemActive = false;
-let timerInterval;
-let activeTime = 0;
-let breakActive = false;
+let poweredOn = false;
+let active = false;
+let chatTimer = null;
+let breakTimer = null;
+let emotionState = "neutral";
+let gptEndpoint = "http://localhost:4891/v1/chat/completions"; // Default GPT4All API port
 
-function setStatus(status) {
-  if (status === "active") {
-    statusLight.src = "assets/pixagpt_status_active.png";
-  } else if (status === "thinking") {
-    statusLight.src = "assets/pixagpt_status_thinking.png";
+// ======== POWER SYSTEM ========
+powerBtn.addEventListener("click", () => {
+  poweredOn = !poweredOn;
+  if (poweredOn) {
+    robotEmotion.src = "assets/pixagpt_happy.png";
+    statusIcon.src = "assets/pixagpt_status_active.png";
+    powerBtn.src = "assets/pixagpt_poweroff_button.png";
+    addSystemMessage("PIXA GPT is now online. How can I help?");
+    startTimers();
   } else {
-    statusLight.src = "assets/pixagpt_status_unactive.png";
+    robotEmotion.src = "assets/pixagpt_neutral.png";
+    statusIcon.src = "assets/pixagpt_status_unactive.png";
+    powerBtn.src = "assets/pixagpt_poweron_button.png";
+    addSystemMessage("PIXA GPT has been powered off.");
+    stopTimers();
   }
+});
+
+// ======== MESSAGE SYSTEM ========
+sendBtn.addEventListener("click", () => {
+  const message = userInput.value.trim();
+  if (!message || !poweredOn) return;
+
+  addUserMessage(message);
+  userInput.value = "";
+  robotEmotion.src = "assets/pixagpt_thinking.png";
+  statusIcon.src = "assets/pixagpt_status_thinking.png";
+
+  // GPT4All request
+  fetch(gptEndpoint, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      model: "gpt4all",
+      messages: [{ role: "user", content: message }]
+    })
+  })
+    .then(res => res.json())
+    .then(data => {
+      const reply = data?.choices?.[0]?.message?.content || "No response received.";
+      addBotMessage(reply);
+      robotEmotion.src = "assets/pixagpt_happy.png";
+      statusIcon.src = "assets/pixagpt_status_active.png";
+    })
+    .catch(() => {
+      addBotMessage("⚠️ Unable to connect to GPT4All. Please ensure the API server is enabled.");
+      robotEmotion.src = "assets/pixagpt_sad.png";
+      statusIcon.src = "assets/pixagpt_status_unactive.png";
+    });
+});
+
+function addUserMessage(text) {
+  const msg = document.createElement("div");
+  msg.classList.add("user-message");
+  msg.textContent = `You: ${text}`;
+  chatBox.appendChild(msg);
+  chatBox.scrollTop = chatBox.scrollHeight;
 }
 
+function addBotMessage(text) {
+  const msg = document.createElement("div");
+  msg.classList.add("bot-message");
+  msg.textContent = `PIXA GPT: ${text}`;
+  chatBox.appendChild(msg);
+  chatBox.scrollTop = chatBox.scrollHeight;
+}
+
+function addSystemMessage(text) {
+  const msg = document.createElement("div");
+  msg.classList.add("system-message");
+  msg.textContent = `[SYSTEM]: ${text}`;
+  chatBox.appendChild(msg);
+  chatBox.scrollTop = chatBox.scrollHeight;
+}
+
+// ======== TIME SYSTEM ========
 function updateTime() {
   const now = new Date();
-  const hrs = now.getHours();
-  const mins = now.getMinutes().toString().padStart(2, "0");
-  timeText.textContent = `${hrs}:${mins}`;
+  const hours = now.getHours();
+  const minutes = String(now.getMinutes()).padStart(2, "0");
+  liveTime.textContent = `${hours}:${minutes}`;
 
-  if (hrs >= 6 && hrs < 12) timeIcon.src = "assets/pixagpt_time_morning.png";
-  else if (hrs >= 12 && hrs < 17) timeIcon.src = "assets/pixagpt_time_afternoon.png";
-  else if (hrs >= 17 && hrs < 20) timeIcon.src = "assets/pixagpt_time_evening.png";
-  else timeIcon.src = "assets/pixagpt_status_night.png";
-}
-
-setInterval(updateTime, 1000);
-
-powerBtn.addEventListener("click", () => {
-  if (!systemActive) {
-    systemActive = true;
-    powerBtn.src = "assets/pixagpt_poweron_button.png";
-    setStatus("active");
-    chatBox.innerHTML += `<p>🟢 System Activated</p>`;
-    greetUser();
-    startTimer();
+  if (hours >= 5 && hours < 12) {
+    timeIcon.src = "assets/pixagpt_time_morning.png";
+  } else if (hours >= 12 && hours < 17) {
+    timeIcon.src = "assets/pixagpt_time_afternoon.png";
+  } else if (hours >= 17 && hours < 20) {
+    timeIcon.src = "assets/pixagpt_time_evening.png";
   } else {
-    systemActive = false;
-    powerBtn.src = "assets/pixagpt_poweroff_button.png";
-    setStatus("unactive");
-    chatBox.innerHTML += `<p>🔴 System Deactivated</p>`;
-    clearInterval(timerInterval);
-    activeTime = 0;
+    timeIcon.src = "assets/pixagpt_status_night.png";
   }
-});
-
-sendBtn.addEventListener("click", async () => {
-  if (!systemActive || breakActive) return;
-  const msg = messageInput.value.trim();
-  if (!msg) return;
-  chatBox.innerHTML += `<p><b>You:</b> ${msg}</p>`;
-  messageInput.value = "";
-  setStatus("thinking");
-  robotFace.src = "assets/pixagpt_thinking.png";
-
-  try {
-    const response = await fetch(API_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        model: MODEL,
-        messages: [{ role: "user", content: msg }],
-      }),
-    });
-
-    const data = await response.json();
-    const reply = data.choices?.[0]?.message?.content || "(No reply)";
-    chatBox.innerHTML += `<p><b>PIXA-GPT:</b> ${reply}</p>`;
-    setStatus("active");
-    robotFace.src = "assets/pixagpt_neutral.png";
-  } catch (err) {
-    chatBox.innerHTML += `<p style="color:red;">⚠️ Connection error. Is GPT4All running?</p>`;
-    setStatus("unactive");
-  }
-});
-
-function greetUser() {
-  const hour = new Date().getHours();
-  let greeting = "Hello!";
-  if (hour >= 6 && hour < 12) greeting = "Good morning! How’s your day starting?";
-  else if (hour >= 12 && hour < 17) greeting = "Good afternoon! How’s everything?";
-  else if (hour >= 17 && hour < 20) greeting = "Good evening! How was your day?";
-  else greeting = "Working late? Hope your night’s going well!";
-  chatBox.innerHTML += `<p><b>PIXA-GPT:</b> ${greeting}</p>`;
 }
 
-function startTimer() {
-  timerInterval = setInterval(() => {
-    if (!systemActive) return;
-    activeTime++;
-    if (activeTime >= 2400) { // 40 minutes
-      showBreakPopup();
-      clearInterval(timerInterval);
-    }
-  }, 1000);
+// ======== BREAK SYSTEM ========
+function startTimers() {
+  updateTime();
+  if (chatTimer) clearInterval(chatTimer);
+  if (breakTimer) clearTimeout(breakTimer);
+
+  chatTimer = setInterval(updateTime, 60000);
+  breakTimer = setTimeout(showBreakPopup, 40 * 60 * 1000); // Every 40 minutes
+}
+
+function stopTimers() {
+  clearInterval(chatTimer);
+  clearTimeout(breakTimer);
 }
 
 function showBreakPopup() {
-  breakPopup.style.display = "block";
+  breakPopup.style.display = "flex";
+  robotEmotion.src = "assets/pixagpt_breaktimeworking.png";
+  addSystemMessage("It's time for a 20-second break!");
+  let breakCountdown = 20;
+  const interval = setInterval(() => {
+    if (breakCountdown <= 0) {
+      clearInterval(interval);
+      breakPopup.style.display = "none";
+      robotEmotion.src = "assets/pixagpt_happy.png";
+      addSystemMessage("Break complete. Ready to continue!");
+    }
+    breakCountdown--;
+  }, 1000);
 }
-
-breakBtn.addEventListener("click", () => {
-  breakActive = true;
-  breakPopup.style.display = "none";
-  robotFace.src = "assets/pixagpt_breaktimeworking.png";
-  chatBox.innerHTML += `<p><b>PIXA-GPT:</b> See? I’m still working — take your time!</p>`;
-  setTimeout(() => {
-    breakActive = false;
-    robotFace.src = "assets/pixagpt_neutral.png";
-    chatBox.innerHTML += `<p><b>PIXA-GPT:</b> Break over — ready when you are!</p>`;
-    startTimer();
-  }, 20000);
-});
 
 continueBtn.addEventListener("click", () => {
   breakPopup.style.display = "none";
-  startTimer();
+  robotEmotion.src = "assets/pixagpt_happy.png";
 });
 
-closePopupBtn.addEventListener("click", () => {
+closeBreakBtn.addEventListener("click", () => {
   breakPopup.style.display = "none";
-  startTimer();
+  addSystemMessage("Break dismissed manually.");
 });
+
+// ======== INITIAL STATE ========
+window.onload = () => {
+  robotEmotion.src = "assets/pixagpt_neutral.png";
+  statusIcon.src = "assets/pixagpt_status_unactive.png";
+  powerBtn.src = "assets/pixagpt_poweron_button.png";
+  updateTime();
+};
