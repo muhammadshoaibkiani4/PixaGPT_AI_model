@@ -1,41 +1,54 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PIXA-GPT</title>
-  <link rel="stylesheet" href="style.css">
-  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PIXA-GPT</title>
+    <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div class="container">
+    <div class="background">
+        <img src="assets/pixagpt_website_background.png" class="bg" alt="Background" />
 
-    <!-- LEFT PANEL -->
-    <div class="left-panel">
-      <div class="top-bar">
-        <img id="statusBulb" src="assets/pixa_gpt_activation_bulb_unactive.png" alt="Bulb">
-        <div class="power-buttons">
-          <img id="powerOff" src="assets/pixa_gpt_power_off_button.png" alt="Power Off" class="power-btn">
-          <img id="powerOn" src="assets/pixa_gpt_power_on_button.png" alt="Power On" class="power-btn">
+        <!-- Top bar -->
+        <div class="top-bar">
+            <div class="time-frame">
+                <img id="time-icon" src="assets/pixagpt_time_morning.png" alt="Time icon" />
+                <span id="current-time">00:00 AM</span>
+            </div>
+
+            <div class="status-bar">
+                <img id="status-icon" src="assets/pixagpt_status_unactive.png" alt="Status" />
+                <img id="power-on" class="button" src="assets/pixagpt_poweron_button.png" alt="Power On" />
+                <img id="power-off" class="button" src="assets/pixagpt_poweroff_button.png" alt="Power Off" />
+            </div>
         </div>
-      </div>
 
-      <div class="face-frame">
-        <img id="faceImage" src="assets/pixa_gpt_pixel_face_neutral.png" alt="AI Face">
-      </div>
+        <!-- Robot face -->
+        <div class="robot-section">
+            <img id="robot-face" src="assets/pixagpt_neutral.png" alt="Robot face" />
+        </div>
+
+        <!-- Chat section -->
+        <div class="chat-section">
+            <div id="chat-box" class="chat-box"></div>
+            <div class="message-bar">
+                <input id="user-input" type="text" placeholder="Type your message..." />
+                <img id="send-btn" src="assets/pixagpt_chat_message_enter_button.png" alt="Send" />
+            </div>
+        </div>
     </div>
 
-    <!-- RIGHT PANEL -->
-    <div class="right-panel">
-      <div id="chatBox"></div>
-      <div class="chat-bar">
-        <input type="text" id="userInput" placeholder="Type here...">
-        <button id="sendButton">ENTER</button>
-      </div>
+    <!-- Breaktime Popup -->
+    <div id="break-popup" class="popup hidden">
+        <img src="assets/pixagpt_break_popup.png" class="popup-bg" alt="Break popup" />
+        <div class="popup-buttons">
+            <img id="close-popup" src="assets/pixagpt_close_breaktime_button.png" alt="Close" />
+            <img id="continue-btn" src="assets/pixagpt_continue_button.png" alt="Continue" />
+            <img id="break-btn" src="assets/pixagpt_takeabreak_button.png" alt="Take a break" />
+        </div>
     </div>
 
-  </div>
-
-  <script src="script.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
