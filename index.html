@@ -1,49 +1,55 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>PIXA-GPT</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>PIXA-GPT Lite — Offline Q&A</title>
+
+  <!-- style -->
   <link rel="stylesheet" href="style.css" />
+
+  <!-- PDF.js (for client-side PDF text extraction) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.10.111/pdf.min.js"></script>
+
+  <!-- Fuse.js (for fuzzy searching) -->
+  <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.6.2"></script>
 </head>
 <body>
-  <!-- Background -->
-  <div id="bg">
-    <img src="assets/pixagpt_website_background.png" id="background" alt="PIXA-GPT Background">
+  <div id="app">
+    <img id="background" src="assets/pixagpt_website_background.png" alt="background" />
 
-    <!-- Power Button -->
-    <img src="assets/pixagpt_poweroff_button.png" id="power-button" alt="Power Button">
+    <!-- Power (top-left gap) -->
+    <img id="power-btn" class="ui-img" src="assets/pixagpt_poweroff_button.png" alt="power">
 
-    <!-- Status Icon -->
-    <img src="assets/pixagpt_status_unactive.png" id="status-icon" alt="Status Icon">
+    <!-- Status (top-right area) -->
+    <img id="status-icon" class="ui-img" src="assets/pixagpt_status_unactive.png" alt="status">
 
-    <!-- Time Icon -->
-    <img src="assets/pixagpt_time_morning.png" id="time-icon" alt="Time Icon">
+    <!-- Time icon -->
+    <img id="time-icon" class="ui-img" src="assets/pixagpt_time_morning.png" alt="time icon">
 
-    <!-- Time Display -->
-    <div id="time-display"></div>
+    <!-- Live time text -->
+    <div id="time-text">--:--</div>
 
-    <!-- Robot -->
-    <img src="assets/pixagpt_neutral.png" id="robot" alt="Robot">
+    <!-- Robot area (left) -->
+    <div id="robot-area">
+      <img id="robot-face" src="assets/pixagpt_neutral.png" alt="robot face">
+    </div>
 
-    <!-- Chat Area -->
-    <div id="chat-box">
-      <div id="chat-messages"></div>
+    <!-- Chat area (right) -->
+    <div id="chat-area">
+      <div id="messages"></div>
 
-      <div id="chat-controls">
-        <img src="assets/pixagpt_message_typing_bar.png" id="typing-bar" alt="Typing Bar">
-        <img src="assets/pixagpt_chat_message_enter_button.png" id="send-button" alt="Send Button">
+      <div id="input-row">
+        <input id="user-input" placeholder="Ask me a question..." autocomplete="off" />
+        <button id="send-btn">Send</button>
       </div>
     </div>
 
-    <!-- Break Popup -->
-    <div id="break-popup">
-      <img src="assets/pixagpt_break_popup.png" id="popup-bg" alt="Break Popup">
-      <div id="popup-buttons">
-        <img src="assets/pixagpt_takeabreak_button.png" id="take-break" alt="Take a Break">
-        <img src="assets/pixagpt_continue_button.png" id="continue" alt="Continue">
-        <img src="assets/pixagpt_close_breaktime_button.png" id="close-popup" alt="Close Popup">
-      </div>
+    <!-- Hidden: file loader if you want to upload manually -->
+    <div id="loader-ui" class="hidden">
+      <label for="pdf-input">Upload Q&A PDF (optional): </label>
+      <input type="file" id="pdf-input" accept="application/pdf"/>
+      <button id="reload-btn">Reload from PDF</button>
     </div>
   </div>
 
