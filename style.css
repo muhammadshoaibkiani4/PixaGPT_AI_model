@@ -1,195 +1,149 @@
-/* General Layout */
-body {
+* {
   margin: 0;
   padding: 0;
-  overflow: hidden;
-  background-color: #000;
-  font-family: "Courier New", monospace;
+  box-sizing: border-box;
 }
 
-.background {
+body {
+  overflow: hidden;
+  background: #000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+#bg {
   position: relative;
   width: 1366px;
   height: 768px;
-  margin: 0 auto;
 }
 
-.bg-img {
+#background {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 0;
 }
 
-/* Power Button */
-.power-section {
+/* Power Button (top left gap) */
+#power-button {
   position: absolute;
-  top: 40px;
-  left: 100px;
-  width: 120px;
-  height: 120px;
-  z-index: 5;
-}
-
-.power-section img {
-  width: 100%;
-  height: auto;
+  top: 25px;
+  left: 280px;
+  width: 80px;
+  height: 80px;
   cursor: pointer;
 }
 
-/* Top Bar */
-.top-bar {
+/* Status & Time icons (aligned to top bar) */
+#status-icon {
   position: absolute;
-  top: 30px;
-  right: 40px;
-  display: flex;
-  justify-content: space-between;
-  width: 60%;
-  height: 120px;
-  align-items: center;
-  z-index: 4;
-}
-
-.label {
-  font-size: 20px;
-  color: white;
-  margin-right: 10px;
-}
-
-.status-section, .time-section {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.status-section img, .time-section img {
+  top: 35px;
+  left: 600px;
   width: 80px;
   height: 80px;
 }
 
-#live-time {
-  color: #fff;
-  font-size: 18px;
-  font-weight: bold;
+#time-icon {
+  position: absolute;
+  top: 35px;
+  right: 180px;
+  width: 80px;
+  height: 80px;
 }
 
-/* Robot Area (Left Side) */
-.robot-section {
+/* Time display */
+#time-display {
   position: absolute;
-  top: 180px;
-  left: 100px;
+  top: 60px;
+  right: 60px;
+  color: #fff;
+  font-family: "Consolas", monospace;
+  font-size: 20px;
+}
+
+/* Robot placement (left box) */
+#robot {
+  position: absolute;
+  bottom: 80px;
+  left: 60px;
   width: 500px;
   height: 500px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 2;
+  object-fit: contain;
 }
 
-.robot-section img {
-  width: 100%;
-  height: auto;
-}
-
-/* Chat Section (Right Side) */
-.chat-section {
+/* Chat box area (right side blue box) */
+#chat-box {
   position: absolute;
-  top: 160px;
-  right: 80px;
+  top: 200px;
+  right: 50px;
   width: 600px;
-  height: 540px;
-  background: rgba(0, 0, 0, 0.3);
-  border-radius: 12px;
+  height: 400px;
+  background: rgba(0, 0, 50, 0.3);
+  border-radius: 10px;
   overflow: hidden;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  z-index: 3;
 }
 
-.chat-box {
-  flex-grow: 1;
-  padding: 20px;
+#chat-messages {
+  flex: 1;
   overflow-y: auto;
-  color: white;
+  padding: 10px;
+  color: #fff;
+  font-family: "Consolas", monospace;
   font-size: 16px;
-  line-height: 1.4;
-  scrollbar-width: thin;
 }
 
-.message-bar {
-  position: relative;
+/* Message typing area */
+#chat-controls {
   display: flex;
   align-items: center;
-  padding: 10px;
-  background: rgba(255, 255, 255, 0.05);
+  justify-content: center;
+  gap: 8px;
+  padding-bottom: 10px;
 }
 
-.bar-bg {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  opacity: 0.5;
-  top: 0;
-  left: 0;
-  z-index: 0;
+#typing-bar {
+  width: 450px;
+  height: 60px;
 }
 
-#user-input {
-  flex-grow: 1;
-  padding: 10px;
-  background: transparent;
-  border: none;
-  color: white;
-  font-size: 16px;
-  outline: none;
-  z-index: 2;
-}
-
-.send-btn {
-  width: 50px;
-  height: 50px;
+#send-button {
+  width: 80px;
+  height: 60px;
   cursor: pointer;
-  margin-left: 10px;
-  z-index: 2;
 }
 
 /* Break Popup */
-.popup {
+#break-popup {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 600px;
-  height: 400px;
+  display: none;
+  width: 1200px;
+  height: 1200px;
   z-index: 10;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
 }
 
-.popup-bg {
+#popup-bg {
   width: 100%;
   height: 100%;
-  object-fit: contain;
+}
+
+#popup-buttons {
   position: absolute;
-  top: 0;
-  left: 0;
-  z-index: 0;
-}
-
-.popup-buttons {
+  bottom: 50px;
+  width: 100%;
   display: flex;
-  gap: 10px;
-  z-index: 2;
+  justify-content: center;
+  gap: 30px;
 }
 
-.popup-buttons img {
-  width: 100px;
-  height: auto;
+#popup-buttons img {
+  width: 200px;
+  height: 200px;
   cursor: pointer;
 }
